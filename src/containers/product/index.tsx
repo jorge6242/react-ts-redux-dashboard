@@ -1,31 +1,16 @@
-import React, { useEffect, FunctionComponent } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Button from "@material-ui/core/Button";
+import React, { useEffect } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
 import ProductForm from "../../components/ProductForm";
-import { getAll, update, remove } from '../../actions/productActions';
+import { getAll, remove } from '../../actions/productActions';
 import { updateModal } from '../../actions/modalActions';
+import DataTable from '../../components/DataTable'
+import ProductColumn from '../../interfaces/productColumn';
 
-interface Column {
-  id: "id" | "description" | "price";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number) => string;
-}
-
-const columns: Column[] = [
+const columns: ProductColumn[] = [
   { id: "id", label: "Id", minWidth: 170 },
   {
     id: "description",
@@ -41,88 +26,6 @@ const columns: Column[] = [
   }
 ];
 
-interface Data {
-  id: number;
-  description: string;
-  price: string;
-}
-
-const useStyles = makeStyles({
-  root: {
-    width: "100%"
-  },
-  container: {
-    maxHeight: 440
-  }
-});
-
-interface DataTableProps {
-  data: any;
-  handleEdit: any;
-  handleDelete: any;
-}
-
-const DataTable: FunctionComponent<DataTableProps> = ({
-  data,
-  handleEdit,
-  handleDelete
-}) => {
-  const classes = useStyles();
-
-  return (
-    <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.length > 0 &&
-              data.map((row: Data) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map(column => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      <Button variant="contained" color="primary" onClick={() => handleEdit(row.id)}>
-                        Edit
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="contained" color="secondary" onClick={() => handleDelete(row.id)}>
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  );
-};
-
 export default function Product() {
   const dispatch = useDispatch();
   const products = useSelector((state: any) => state.productReducer.products);
@@ -134,14 +37,14 @@ export default function Product() {
   }, [dispatch]);
 
   const handleEdit = (id: number) => {
-    // dispatch(
-    //   updateModal({
-    //     payload: {
-    //       status: true,
-    //       element: <ProductForm id={id} />
-    //     }
-    //   })
-    // );
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <ProductForm id={id} />
+        }
+      })
+    );
   };
 
   const handleDelete = (id: number) => {
@@ -149,16 +52,15 @@ export default function Product() {
   };
 
   const handleCreate = () => {
-    // dispatch(
-    //   updateModal({
-    //     payload: {
-    //       status: true,
-    //       element: <ProductForm id={0} />
-    //     }
-    //   })
-    // );
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <ProductForm id={0} />
+        }
+      })
+    );
   }
-
 
   return (
     <div className="product-container">
@@ -171,7 +73,13 @@ export default function Product() {
         </div>
       </div>
       <div>
-        <DataTable data={products} handleEdit={handleEdit} handleDelete={handleDelete} />
+        <DataTable 
+          data={products} 
+          columns={columns} 
+          handleEdit={handleEdit} 
+          handleDelete={handleDelete}
+          isDelete
+        />
       </div>
     </div>
   );

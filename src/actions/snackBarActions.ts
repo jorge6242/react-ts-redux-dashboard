@@ -3,7 +3,7 @@ export const ACTIONS = {
 };
 
 export default function snackBarUpdate(value: object) {
-  return (dispatch: any) => {
+  return (dispatch: Function) => {
     dispatch({ type: ACTIONS.STATUS, ...value });
   };
 }

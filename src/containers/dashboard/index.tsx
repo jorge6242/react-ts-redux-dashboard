@@ -16,6 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { useDispatch } from 'react-redux';
+
+import { logout } from '../../actions/loginActions';
 
 const drawerWidth = 240;
 
@@ -73,6 +76,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -82,7 +86,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     history.push(path);
   };
 
-  const handleLogout = () => {}
+  const handleLogout = () => dispatch(logout())
 
   const drawer = (
     <div>

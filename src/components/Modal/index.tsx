@@ -5,6 +5,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import "./index.sass";
+import { updateModal } from '../../actions/modalActions';
 
 /**
  * Generic Modal

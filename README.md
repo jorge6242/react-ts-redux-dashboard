@@ -3,14 +3,15 @@
 ## Features
 
 - ReactJS-Typescript with Hooks
+- Interfaces and Types
 - Auth Login with API REST
 - Forms validations with Hooks
 - LocalStorage Encryption with secure-ls
 - React Router
 - Material UI
 - Bem Metodology
-- Global Store with React Context API and useReducer()
-- Custom components like Modal, Snackbar and form elements
+- Redux and Redux-Thunk
+- Custom components like Modal, Snackbar, DataTable and Form Elements
 
 
 ## Config

@@ -6,7 +6,7 @@ const Category = {
   getAll() {
     return AXIOS.get(`${Prefix.api}/category`, { headers: headers() });
   },
-  create(data: any) {
+  create(data: object) {
     return AXIOS.post(
       `${Prefix.api}/category`,
       {

@@ -1,20 +1,23 @@
-const GET_ALL = 'category/get_all'
-const GET = 'category/get'
-const SET_LOADING = 'category/set_loading'
+export const ACTIONS = {
+  GET_ALL: "product/get_all",
+  GET: "product/get",
+  SET_LOADING: "product/set_loading"
+};
 
-interface GetAll {
-  type: typeof GET_ALL
-  payload: Array<string | number>
+interface GetProduct {
+  type: typeof ACTIONS.GET
+  payload: Array<string|number>
 }
 
-interface Get {
-    type: typeof GET
-    payload: Array<string | number>
-  }
+interface GetAllProduct {
+  type: typeof ACTIONS.GET_ALL
+  payload: Array<string|number>
+}
 
-interface SetLoading {
-    type: typeof SET_LOADING
-    payload: boolean
-  }
+interface SetLoadng {
+  type: typeof ACTIONS.SET_LOADING
+  payload: Array<string|number>
+}
 
-export type ProductTypes = GetAll | Get | SetLoading
+
+export type ProductActionTypes = GetProduct | GetAllProduct | SetLoadng

@@ -68,8 +68,8 @@ const CategoryForm: FunctionComponent<CategoryFormProps> = ({ id }) => {
   useEffect(() => {
     async function fetch() {
       if (id) {
-        const { description } = await dispatch(get(id));
-        setValue("description", description);
+        const response: any = await dispatch(get(id));
+        setValue("description", response);
       }
     }
     fetch();

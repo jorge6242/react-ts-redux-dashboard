@@ -1,22 +1,16 @@
-import {  ACTIONS } from '../actions/productActions';
-
-type ProductActions = {
-    type: 'category/get_all' | 'category/get' | 'category/set_loading';
-    payload: any;
-}
+import {  ACTIONS, CategoryActionTypes } from '../interfaces/actionTypes/categoryTypes';
 
 type CategoryInitialState = {
     categories: Array<string | number>;
     loading: boolean;
 }
 
-
 const initialState: CategoryInitialState = {
     categories: [],
     loading: false
 };
 
-const productReducer = (state = initialState, action: ProductActions) => {
+const categoryReducer = (state = initialState, action: CategoryActionTypes) => {
     switch (action.type) {
         case ACTIONS.GET_ALL:
             return {
@@ -33,4 +27,4 @@ const productReducer = (state = initialState, action: ProductActions) => {
     }
 };
 
-export default productReducer;
+export default categoryReducer;

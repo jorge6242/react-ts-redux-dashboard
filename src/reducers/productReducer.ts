@@ -1,11 +1,4 @@
-import {
-    ACTIONS
-} from '../actions/productActions';
-
-type ProductActions = {
-    type: 'product/get_all' | 'product/get' | 'product/set_loading';
-    payload: any;
-}
+import { ACTIONS, ProductActionTypes } from '../interfaces/actionTypes/productTypes';
 
 type ProductInitialState = {
     products: Array<string | number>;
@@ -17,7 +10,7 @@ const initialState: ProductInitialState = {
     loading: false
 };
 
-const productReducer = (state = initialState, action: ProductActions) => {
+const productReducer = (state = initialState, action: ProductActionTypes)  => {
     switch (action.type) {
         case ACTIONS.GET_ALL:
             return {

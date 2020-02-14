@@ -3,7 +3,7 @@ import Prefix from "../config/ApiPrefix"
 import headers from "../helpers/headers";
 
 const Auth = {
-  login(data: any) {
+  login(data: object) {
     return AXIOS.post(`${Prefix.api}/auth/login`, {
       ...data
     });

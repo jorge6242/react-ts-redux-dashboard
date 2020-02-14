@@ -5,10 +5,12 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from 'react-redux';
 
 import CustomTextField from "../FormElements/CustomTextField";
 import CustomSelect from "../FormElements/CustomSelect";
-import { useStore } from "../../store";
+import { get, update, create } from "../../actions/productActions";
+import { getAll as getAllCategories } from "../../actions/categoryActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -63,23 +65,24 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
     reset,
     setValue
   } = useForm<FormData>();
-  const { get, update, create, loading } = useStore('useProductStore');
-  const { categories, getAll } = useStore('useCategoryStore');
-  const { snackBarUpdate } = useStore('useSnackBarStore');
-  const { updateModal } = useStore('useModalStore');
+  const loading = useSelector((state: any) => state.productReducer.loading);
+  const categories = useSelector((state: any) => state.categoryReducer.categories);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     async function fetch() {
-      await getAll();
+      await dispatch(getAllCategories());
       if (id) {
-        const { description, price, categories_id } = await get(id);
+        const response: any = await dispatch(get(id));
+        const { description, price, categories_id } = response;
         setValue("description", description);
         setValue("price", price);
         setValue("categories_id", categories_id);
       }
     }
     fetch();
-  }, [id]);
+  }, [id, dispatch, setValue]);
 
   useEffect(() => {
     return () => {
@@ -89,39 +92,11 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
 
   const handleForm = (form: object) => {
     if (id) {
-      update({ id, ...form }).then(() => {
-        snackBarUpdate({
-          payload: {
-            message: "Product Updated!",
-            status: true,
-            type: "success"
-          }
-        })
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      });
+      dispatch(update({ id, ...form }));
     } else {
-      create(form).then(() => {
-        snackBarUpdate({
-          payload: {
-            message: "Product Created!",
-            status: true,
-            type: "success"
-          }
-        })
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      });
+      dispatch(create(form));
     }
-  }
+  };
 
   return (
     <Container component="main">

@@ -1,28 +1,24 @@
 import React from "react";
 import { useHistory } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
 
 import "./index.sass";
 import LoginForm from "../../components/LoginForm";
-import { useStore } from "../../store";
+import { login } from "../../actions/loginActions";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const history = useHistory()
-  const { loading, login } = useStore('useLoginStore');
-  const { snackBarUpdate } = useStore('useSnackBarStore');
+  const { loading } = useSelector((state: any) => state.loginReducer);
 
-  const handleForm = (form: object) => {
-    login(form).then(() => {
-      history.push('/dashboard')
-    }).catch((err: any) => {
-      const { data: { message } } = err;
-      snackBarUpdate({
-        payload: {
-          message,
-          status: true,
-          type: "error"
-        }
-      })
-    })
+  const handleForm = async (form: object) => {
+    try {
+     await dispatch(login(form))
+     history.push('/dashboard')
+    } catch (error) {
+      return error;
+    }
+    
   };
   return (
     <div className="login-container">

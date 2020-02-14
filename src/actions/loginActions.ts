@@ -1,75 +1,50 @@
-import { useReducer } from "react";
+import Auth from '../services/Auth';
+import SecureStorage from '../config/SecureStorage'
+import snackBarUpdate from '../actions/snackBarActions';
+import { ACTIONS } from '../interfaces/actionTypes/loginTypes';
 
-import Auth from "../services/Auth";
-import SecureStorage from "../config/SecureStorage";
-
-type ActionType = {
-  type: "login/login" | "login/set_user" | "login/logout" | "login/set_loading";
-  payload: any;
-};
-
-const initialState = {
-  user: {
-    username: "",
-    email: "",
-    age: 0
-  },
-  status: false,
-  loading: false
-};
-
-const reducer = (state = initialState, action: ActionType) => {
-  switch (action.type) {
-    case "login/set_user":
-      return {
-        ...state,
-        user: action.payload,
-        status: true
-      };
-    case "login/logout":
-      SecureStorage.removeItem("token");
-      window.location.href = "/";
-      return {
-        ...state,
-        ...initialState
-      };
-    case "login/set_loading":
-      return {
-        ...state,
-        loading: action.payload
-      };
-    default:
-      return state;
-  }
-};
-
-export default function useLoginActions() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const login = async (body: object) => {
-    dispatch({ type: 'login/set_loading', payload: true })
+export const login = (body: object) => async (dispatch: Function) => {
+    dispatch({ type: ACTIONS.SET_LOADING, payload: true })
     try {
-        const response = await Auth.login(body);
+        const {
+            data,
+            status
+        } = await Auth.login(body);
         let authResponse: any = [];
-        const { data, status } = response;
         if (status === 200 || status === 201) {
-            authResponse = response ;
+            authResponse = {
+                data,
+                status
+            };
             const { access_token: { token }, user } = data;
             SecureStorage.setItem('token', token);
-            dispatch({ type: 'login/set_user', payload: user })
-            dispatch({ type: 'login/set_loading', payload: false })
+            dispatch({ type: ACTIONS.SET_USER, payload: user })
+            dispatch({ type: ACTIONS.SET_LOADING, payload: false })
         }
         return authResponse;
     } catch (error) {
-        dispatch({ type: 'login/set_loading', payload: false })
-        throw error.response;
+        let title = ''
+        if (error.response) {
+            const { status, data: { message } } = error.response
+            if (status === 401) {
+                title = message
+            }
+        }
+        snackBarUpdate({
+            payload: {
+                message: title,
+                status: true,
+                type: 'error',
+            },
+        })(dispatch);
+        dispatch({ type: ACTIONS.SET_LOADING, payload: false })
+        throw error;
     }
 };
 
+export const logout = () => ({ type: ACTIONS.LOGOUT })
 
-const logout = () => dispatch({ type: 'login/logout', payload: null })
-
-const checkUser = async () => {
+export const checkUser = () => async (dispatch: Function) => {
     try {
         const {
             data,
@@ -78,13 +53,10 @@ const checkUser = async () => {
         let checkUserLoginResponse = [];
         if (status === 200) {
             checkUserLoginResponse = data;
-            dispatch({ type: 'login/set_user', payload: data })
+            dispatch({ type: ACTIONS.SET_USER, payload: data })
         }
         return checkUserLoginResponse;
     } catch (error) {
         return error;
     }
 };
-
-  return { login, checkUser, logout, state };
-}
