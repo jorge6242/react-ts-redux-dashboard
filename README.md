@@ -1,4 +1,5 @@
-# Dashboard-CRUD with ReactJS-Typescript and Hooks
+# Dashboard-CRUD
+# ReactJS-Hooks-Typescript and Redux-Redux-Thunk  
 
 ## Features
 
