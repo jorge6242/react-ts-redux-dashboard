@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter,
   Route,
   Switch,
   Redirect,
@@ -25,7 +25,7 @@ export default function Routes() {
   }, [dispatch])
   
   return (
-    <Router>
+    <HashRouter>
       <MainLayout>
         <Switch>
           <Route path="/" exact component={Login} />
@@ -60,6 +60,6 @@ export default function Routes() {
         <Modal />
         <SnackBar />
       </MainLayout>
-    </Router>
+    </HashRouter>
   );
 }
