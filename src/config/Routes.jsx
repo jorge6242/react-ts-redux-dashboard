@@ -16,6 +16,7 @@ import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
 import Category from "../containers/category";
 import { checkUser } from "../actions/loginActions"
+import SecondModal from "../components/SecondModal";
 
 export default function Routes() {
   
@@ -58,6 +59,7 @@ export default function Routes() {
           />
         </Switch>
         <Modal />
+        <SecondModal />
         <SnackBar />
       </MainLayout>
     </HashRouter>

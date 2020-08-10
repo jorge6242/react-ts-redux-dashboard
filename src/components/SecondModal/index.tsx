@@ -5,7 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import "./index.sass";
-import { updateModal } from "../../actions/modalActions";
+import { updateModal } from "../../actions/secondModalActions";
 
 
 /**
@@ -32,20 +32,20 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function Modal() {
+export default function SecondModal() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { status, element, isLoader, customSize, title } = useSelector((state: any) => state.modalReducer);
+    const { status, element, isLoader, customSize, title } = useSelector((state: any) => state.secondModalReducer);
     return (
-        <div className={`modal-container ${status ? "modal-container--active" : ""}`}>
-            <div className="modal-backdrop">
-                <div className={`modal modal--${customSize}`}>
-                    <div className={`modal__loader ${isLoader ? "modal__loader--active" : ""} `}>
+        <div className={`second-modal-container ${status ? "second-modal-container--active" : ""}`}>
+            <div className="second-modal-backdrop">
+                <div className={`second-modal second-modal--${customSize}`}>
+                    <div className={`second-modal__loader ${isLoader ? "second-modal__loader--active" : ""} `}>
                         <CircularProgress className={classes.progress} color="primary" />
                     </div>
-                    <div className="modal__header">
+                    <div className="second-modal__header">
                         <div
-                            className="modal__header-close-icon"
+                            className="second-modal__header-close-icon"
                             onClick={() =>
                                 dispatch(
                                     updateModal({
@@ -61,8 +61,8 @@ export default function Modal() {
                             <CloseIcon />
                         </div>
                     </div>
-                    <div className="modal__content">{element}</div>
-                    <div className="modal__footer"></div>
+                    <div className="second-modal__content">{element}</div>
+                    <div className="second-modal__footer"></div>
                 </div>
             </div>
         </div>
